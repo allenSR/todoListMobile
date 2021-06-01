@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+	
+	<item
+		 android:id="@+id/settingsItem"
+		 android:title="Настройки"
+		 android:icon="@drawable/settingswhite"
+		 app:showAsAction ="ifRoom" />
+	<item
+	android:id="@+id/systemMenu"
+	android:icon="@drawable/three_dots_vertical_icon_159806"
+	app:showAsAction ="never" />
+</menu> 
