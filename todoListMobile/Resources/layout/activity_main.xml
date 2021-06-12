@@ -13,10 +13,10 @@
 		android:minWidth="25px"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/toolbarCommonTasks"
+		android:id="@+id/toolbarMainScreen"
 		android:textColor="#ffe0e0e0"
 		android:background="#2c3e50"
-	android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+		android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
 		android:titleTextColor="@android:color/background_light"
 		android:title="ToDo List"
 		android:textAlignment="center"
@@ -36,19 +36,40 @@
 		<Button
 			android:layout_width="300dp"
 			android:layout_height="50dp"
-			android:text="Ежедневные задачи"
+			android:text="Задачи на по дням недели"
 			android:onClick="mondayButton_Click"
 			android:id="@+id/DailyTaskButton"
 			android:background="@drawable/custombutton"
-						/>
+		/>
+
 		<Button
 			android:layout_width="300dp"
 			android:layout_height="50dp"
-			android:text="Общие задачи:"
+			android:text="Все задачи на текущую неделю"
+			android:id="@+id/weeklyTaskButton"
+			android:layout_marginTop="25dp"
+			android:background="@drawable/custombutton"
+			/>
+
+		<Button
+			android:layout_width="300dp"
+			android:layout_height="50dp"
+			android:text="Общие задачи"
 			android:id="@+id/CommonTaskButton"
 			android:layout_marginTop="25dp"
 			android:background="@drawable/custombutton"
 			/>
+
+		<Button
+			android:layout_width="300dp"
+			android:layout_height="50dp"
+			android:text="Задачи за все время"
+			android:id="@+id/allTaskButton"
+			android:layout_marginTop="25dp"
+			android:background="@drawable/custombutton"
+			/>
+
+
 
 		<Button
 			android:layout_width="300dp"

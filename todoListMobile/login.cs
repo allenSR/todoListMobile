@@ -22,10 +22,6 @@ namespace todoListMobile
     [Activity(Label = "Список дел: вход", MainLauncher = true)]
     class login: Activity
     {
-        public static  string APP_PREFERENCES = "mysettings";
-        public static  string APP_PREFERENCES_LOGIN = ""; 
-        public static string APP_PREFERENCES_PASSWORD = "";
-        public static bool APP_PREFERENCES_PassChecked = false;
 
         CheckBox checkBox;
         EditText loginText;
@@ -46,9 +42,7 @@ namespace todoListMobile
             Button connectionSettinsButton = FindViewById<Button>(Resource.Id.connectionSettingsButton);
 
             loginButton.Click += LoginButton_Click;
-            registrationButton.Click += registrationButton_Click;
             connectionSettinsButton.Click += connectionSettingsButton_Click;
-
 
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
             loginText.Text = prefs.GetString("login", "");
@@ -121,13 +115,6 @@ namespace todoListMobile
             dialogSettings.Show();
         }
 
-        private void registrationButton_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-  
-
         private void LoginButton_Click(object sender, EventArgs e)
         {
                      
@@ -153,8 +140,7 @@ namespace todoListMobile
             
             try
             {
-                string url = "http://192.168.0.103:3006/userLogin";
-                //string url = host + port + "/userLogin";
+                string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/userLogin";
                 using (var webClient = new WebClient())
                 {
                     var pars = new NameValueCollection();
@@ -177,14 +163,22 @@ namespace todoListMobile
                         dialog.Show();
                         return;
                     }
-                    else editor.PutString("ID_User", responsebody);
+                    else
+                    {
+                        editor.PutString("ID_User", responsebody);
+                        editor.Apply();
+                    }
 
                    
                 } 
-                editor.PutString("login", loginText.Text);
-                editor.PutString("password", passwordText.Text);
-                editor.PutBoolean("SavePassCheck", checkBox.Checked);
-                editor.Apply();    
+                if(prefs.GetString("login", "")!= loginText.Text || prefs.GetString("password", "") != passwordText.Text)
+                {
+                    editor.PutString("login", loginText.Text);
+                    editor.PutString("password", passwordText.Text);
+                    editor.PutBoolean("SavePassCheck", checkBox.Checked);
+                    editor.Apply();
+                }
+                
 
 
                Intent intent = new Intent(this, typeof(MainActivity));

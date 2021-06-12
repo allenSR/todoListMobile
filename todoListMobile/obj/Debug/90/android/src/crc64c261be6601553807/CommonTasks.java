@@ -2,7 +2,7 @@ package crc64c261be6601553807;
 
 
 public class CommonTasks
-	extends android.support.v7.app.AppCompatActivity
+	extends android.app.Activity
 	implements
 		mono.android.IGCUserPeer
 {

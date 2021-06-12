@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:background="#3c3f53">
+
+    <LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:layout_marginTop="15dp"
+		android:gravity="center_vertical"
+		>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="22"
+			android:textColor="#ffe0e0e0"
+			android:layout_marginLeft="10dp"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"
+			android:id="@+id/numberOfAllTaskText"/>
+
+		<TextView
+			android:layout_width="110dp"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:textColor="#ffe0e0e0"
+			android:text="Описание задачи 1234567890"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"
+			android:textAlignment="center"
+			android:layout_weight="100"
+			android:id="@+id/descriptionAllTaskText"/>
+
+		<TextView
+			android:layout_width="40dp"
+			android:layout_height="wrap_content"
+			android:textColor="#ffe0e0e0"
+			android:text="30.05"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"		
+			android:layout_weight="20"
+			android:layout_marginRight="5dp"
+			android:id="@+id/dateAllTaskText"/>
+
+		<CheckBox
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:gravity="end"
+			android:id="@+id/statusAllTaskText"
+			android:layout_weight="30"
+			android:layout_marginRight="5dp"
+			/>
+
+
+		
+	</LinearLayout>
+
+
+</LinearLayout>

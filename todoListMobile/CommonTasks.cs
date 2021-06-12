@@ -17,11 +17,13 @@ using TodoList;
 namespace todoListMobile
 {[Activity(Label ="Общие задачи", Theme = "@style/AppTheme")]
 
-    class CommonTasks : Android.Support.V7.App.AppCompatActivity
+    class CommonTasks : Activity
     {
         List<Tasks> tasks = new List<Tasks>();
         ListView listView;
         ImageButton addTaskButton_Common;
+
+        [Obsolete]
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -32,70 +34,10 @@ namespace todoListMobile
             Toolbar toolbarCommonTasks = FindViewById<Toolbar>(Resource.Id.toolbarCommonTasks);
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
             string date = prefs.GetString("CurrentDate", "");
+            toolbarCommonTasks.InflateMenu(Resource.Menu.myMenu_forTasks);
+            toolbarCommonTasks.MenuItemClick += ToolbarCommonTasks_MenuItemClick;
+              
 
-            toolbarCommonTasks.InflateMenu(Resource.Menu.myMenu_CommonTasks);
-
-            toolbarCommonTasks.MenuItemClick += (sender, e) => {
-                string title = e.Item.TitleFormatted.ToString();
-                if (title == "Обновить")
-                {
-
-                    try
-                    {
-                        int count = tasks.Count;
-                        while (tasks.Count != 0)
-                        {
-                            tasks.Remove(tasks[count - 1]);
-                            count--;
-                        }
-
-                        string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTasks";
-                        using (var webClient = new WebClient())
-                        {
-                            var pars = new NameValueCollection();
-                            webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                            pars.Add("format", "json");
-                            webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
-                            byte[] responsebytes = webClient.UploadValues(url, pars);
-                            string responsebody = Encoding.UTF8.GetString(responsebytes);
-
-                            var objResponse = JsonConvert.DeserializeObject<List<Tasks>>(responsebody);
-                            for (int i = 0; i < objResponse.Count; i++)
-                            {
-                                var a = objResponse[i];
-                                var id = a.ID_Task;
-                                var task = a.Description;
-                                var status = a.DealStatus;
-
-                                tasks.Add(new Tasks()
-                                {
-                                    ID_Task = a.ID_Task,
-                                    User = a.User,
-                                    NumberOfRows = i + 1,
-                                    Description = a.Description,
-                                    DealStatus = status,
-                                });
-                            }
-                        }
-                    }
-                    catch (System.Exception ex)
-                    {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                        alert.SetTitle("Ошибка");
-                        alert.SetMessage(ex.Message);
-                        alert.SetNegativeButton("ОК", (senderAlert, args) => {
-                            return;
-                        });
-                        Dialog dialog = alert.Create();
-                        dialog.Show();
-                        return;
-                    }
-                    Toast.MakeText(this, "Обновлено", ToastLength.Long).Show();
-
-                    TaskAdapter adapter = new TaskAdapter(this, tasks);
-                    listView.Adapter = adapter;
-                }
-            };
 
             try
             {
@@ -106,7 +48,6 @@ namespace todoListMobile
                     webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                     webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                     pars.Add("format", "json");
-                    //pars.Add("User", prefs.GetInt("ID_User", 0).ToString());
                     byte[] responsebytes = webClient.UploadValues(url, pars);
                     string responsebody = Encoding.UTF8.GetString(responsebytes);
 
@@ -126,7 +67,6 @@ namespace todoListMobile
                             NumberOfRows = i + 1,
                             Description = a.Description,
                             DealStatus = status,
-
                         });
                     }
                 }
@@ -151,6 +91,75 @@ namespace todoListMobile
             listView.Adapter = adapter;
         }
 
+        private void ToolbarCommonTasks_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
+        {
+            ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
+            string title = e.Item.TitleFormatted.ToString();
+            if (e.Item.TitleFormatted.ToString() == "Обновить")
+            {
+
+                try
+                {
+                    int count = tasks.Count;
+                    while (tasks.Count != 0)
+                    {
+                        tasks.Remove(tasks[count - 1]);
+                        count--;
+                    }
+
+                    string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTasks";
+                    using (var webClient = new WebClient())
+                    {
+                        var pars = new NameValueCollection();
+                        webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                        pars.Add("format", "json");
+                        webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
+                        byte[] responsebytes = webClient.UploadValues(url, pars);
+                        string responsebody = Encoding.UTF8.GetString(responsebytes);
+
+                        var objResponse = JsonConvert.DeserializeObject<List<Tasks>>(responsebody);
+                        for (int i = 0; i < objResponse.Count; i++)
+                        {
+                            var a = objResponse[i];
+                            var id = a.ID_Task;
+                            var task = a.Description;
+                            var status = a.DealStatus;
+
+                            tasks.Add(new Tasks()
+                            {
+                                ID_Task = a.ID_Task,
+                                User = a.User,
+                                NumberOfRows = i + 1,
+                                Description = a.Description,
+                                DealStatus = status,
+                            });
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.SetTitle("Ошибка");
+                    alert.SetMessage(ex.Message);
+                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                        return;
+                    });
+                    Dialog dialog = alert.Create();
+                    dialog.Show();
+                    return;
+                }
+                Toast.MakeText(this, "Обновлено", ToastLength.Long).Show();
+
+                TaskAdapter adapter = new TaskAdapter(this, tasks);
+                listView.Adapter = adapter;
+            }
+            if(e.Item.TitleFormatted.ToString() == "Настройки")
+            {
+                Intent intent = new Intent(this, typeof(Settings));
+                StartActivity(intent);
+            }
+        }
+
         private void ListView_ItemLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
         {
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
@@ -163,13 +172,13 @@ namespace todoListMobile
             alertMain.SetPositiveButton("Редактировать", (senderAlert, args) => {
 
                 LayoutInflater inflater = LayoutInflater.From(this);
-                View subView = inflater.Inflate(Resource.Layout.AddCommonTaskDialog, null);
+                View subView = inflater.Inflate(Resource.Layout.EditCommonTaskDialog, null);
                 EditText descriptionTaskText = (EditText)subView.FindViewById(Resource.Id.addTaskEditText_Common);
                 descriptionTaskText.Text = tasks[e.Position].Description;
-
+                string oldDescription = descriptionTaskText.Text;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 builder.SetView(subView);
-                builder.SetPositiveButton("ОК", (senderAlert, args) =>
+                builder.SetPositiveButton("Изменить", (senderAlert, args) =>
                 {
                     if (string.IsNullOrEmpty(descriptionTaskText.Text))
                     {
@@ -185,45 +194,84 @@ namespace todoListMobile
                         return;
                     }
 
+                    // Защита от  повторяющихся задач
                     try
                     {
-                        string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTaskUpdate";
+                        var url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTaskCheck";
                         using (var webClient = new WebClient())
                         {
                             var pars = new NameValueCollection();
                             webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                             webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                             pars.Add("format", "json");
-                           // pars.Add("User", tasks[e.Position].User.ToString());
                             pars.Add("Description", descriptionTaskText.Text);
-                            pars.Add("ID_Task", tasks[e.Position].ID_Task.ToString());
-                            if (tasks[e.Position].DealStatus == 1)
-                            {
-                                pars.Add("DealStatus", "1");
-                            }
-                            else if (tasks[e.Position].DealStatus == 2)
-                            {
-                                pars.Add("DealStatus", "2");
-                            }
-
-                            var elem = tasks.FirstOrDefault(x => x.ID_Task == tasks[e.Position].ID_Task);
-                            if (elem != null)
-                            {
-                                elem.User = tasks[e.Position].User;
-                                elem.NumberOfRows = tasks[e.Position].NumberOfRows;
-                                elem.Description = descriptionTaskText.Text;
-                                elem.DealStatus = tasks[e.Position].DealStatus;
-                            }
                             byte[] responsebytes = webClient.UploadValues(url, pars);
                             string responsebody = Encoding.UTF8.GetString(responsebytes);
+
+                            if(oldDescription == descriptionTaskText.Text)
+                            {
+                                Toast.MakeText(this, "Задача не была изменена.", ToastLength.Long).Show();
+                                return;
+                            }
+                            
+                            if (responsebody != "[]")
+                            {
+                                Toast.MakeText(this, "Нельзя изменить задачу на уже существующую.", ToastLength.Long).Show();
+                                return;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    string urlUpdate = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTaskUpdate";
+                                    using (var webClientUpdate = new WebClient())
+                                    {
+                                        var parsUpdate = new NameValueCollection();
+                                        webClientUpdate.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                                        webClientUpdate.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
+                                        parsUpdate.Add("format", "json");
+                                        // pars.Add("User", tasks[e.Position].User.ToString());
+                                        parsUpdate.Add("Description", descriptionTaskText.Text);
+                                        parsUpdate.Add("ID_Task", tasks[e.Position].ID_Task.ToString());
+                                        if (tasks[e.Position].DealStatus == 1)
+                                        {
+                                            parsUpdate.Add("DealStatus", "1");
+                                        }
+                                        else if (tasks[e.Position].DealStatus == 2)
+                                        {
+                                            parsUpdate.Add("DealStatus", "2");
+                                        }
+
+                                        var elem = tasks.FirstOrDefault(x => x.ID_Task == tasks[e.Position].ID_Task);
+                                        if (elem != null)
+                                        {
+                                            elem.User = tasks[e.Position].User;
+                                            elem.NumberOfRows = tasks[e.Position].NumberOfRows;
+                                            elem.Description = descriptionTaskText.Text;
+                                            elem.DealStatus = tasks[e.Position].DealStatus;
+                                        }
+                                        byte[] responsebytesUpdate = webClientUpdate.UploadValues(urlUpdate, parsUpdate);
+                                        string responsebodyUpdate = Encoding.UTF8.GetString(responsebytesUpdate);
+
+
+                                    }
+                                    Toast.MakeText(this, "Задача успешно изменена", ToastLength.Long).Show();
+                                    listView.Adapter = new TaskAdapter(this, tasks);
+                                }
+                                catch (System.Exception ex)
+                                {
+                                    Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                                }
+                            }
                         }
-                        Toast.MakeText(this, "Задача успешно изменена", ToastLength.Long).Show();
-                        listView.Adapter = new TaskAdapter(this, tasks);
                     }
-                    catch (System.Exception ex)
+                    catch
                     {
-                        Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                        Toast.MakeText(this, "Произошла ошибка.", ToastLength.Long).Show();
+                        return;
                     }
+
+                  
                 });
                 Dialog dialogEdit = builder.Create();
                 dialogEdit.Show();
@@ -282,8 +330,6 @@ namespace todoListMobile
 
             LayoutInflater inflater = LayoutInflater.From(this);
             View subView = inflater.Inflate(Resource.Layout.AddCommonTaskDialog, null);
-         
-
             EditText descriptionTaskText = (EditText)subView.FindViewById(Resource.Id.addTaskEditText_Common);
 
             bool checkedStatus = false;
@@ -292,7 +338,7 @@ namespace todoListMobile
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
             builder.SetView(subView);
-            builder.SetPositiveButton("ОК", (senderAlert, args) =>
+            builder.SetPositiveButton("Добавить задачу", (senderAlert, args) =>
             {
                 if (string.IsNullOrEmpty(descriptionTaskText.Text))
                 {
@@ -307,6 +353,32 @@ namespace todoListMobile
                     return;
                 }
                 descriptionText = descriptionTaskText.Text;
+                // Защита от  повторяющихся задач
+                try
+                {
+                    var url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTaskCheck";
+                    using (var webClient = new WebClient())
+                    {
+                        var pars = new NameValueCollection();
+                        webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                        webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
+                        pars.Add("format", "json");
+                        pars.Add("Description", descriptionText);
+                        byte[] responsebytes = webClient.UploadValues(url, pars);
+                        string responsebody = Encoding.UTF8.GetString(responsebytes);
+                        if (responsebody != "[]")
+                        {
+                            Toast.MakeText(this, "Введенная задача уже существует.", ToastLength.Long).Show();
+                            return;
+                        }
+                    }
+                }
+                catch
+                {
+                    Toast.MakeText(this, "Произошла ошибка.", ToastLength.Long).Show();
+                    return;
+                }
+
                 try
                 {
                     string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/DailyTaskAdd";
@@ -316,7 +388,6 @@ namespace todoListMobile
                         webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                         webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                         pars.Add("format", "json");
-                        //pars.Add("User", ID_User.ToString());
                         pars.Add("DealStatus", "1");
                         pars.Add("Description", descriptionText);
 

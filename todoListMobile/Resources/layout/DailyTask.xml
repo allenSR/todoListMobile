@@ -12,10 +12,11 @@
 		android:minWidth="25px"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/toolbarCommon"
+		android:id="@+id/toolbarDaily"
 		android:textColor="#ffe0e0e0"
-		android:background="#4a4d65"
+		android:background="#2c3e50"
 		android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+		android:title="Текущая неделя"
 		android:titleTextColor="@android:color/background_light"
      />
 
@@ -31,63 +32,58 @@
 		android:textStyle="bold"
 		 />
 
-	<LinearLayout
+	
+		<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:layout_marginTop="0dp"
-	  >
-		<LinearLayout
-			android:orientation="horizontal"
-			android:minWidth="25px"
-			android:minHeight="25px"
-			android:layout_width="match_parent"
+		android:orientation="horizontal"
+		android:layout_marginTop="15dp"
+		
+		>
+
+		<TextView
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:gravity= "center_vertical"
-			android:layout_marginTop="0dp"
-					>
-			<TextView
-				android:text="№"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textSize="18dp"
-				android:textColor="#ffe0e0e0"
-				android:layout_weight="5"
-				
-			 />
-			<TextView
-				android:text="Задача"
-				android:textSize="18dp"
-				android:lineSpacingExtra="4dp"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="15dp"
-				android:layout_weight="100"
-				android:textAlignment="center"
-				android:textColor="#ffe0e0e0"
-			/>
+			android:text="№"
+			android:textColor="#ffe0e0e0"
+			android:layout_marginLeft="10dp"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"/>
 
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="5dp"
+			android:textColor="#ffe0e0e0"
+			android:text="Описание задачи"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"
+			android:textAlignment="center"
+			android:layout_weight="100"/>
 
-			<TextView
-				android:text="Крайний срок"
-				android:layout_width="100dp"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="15dp"
-				android:textSize="18dp"
-				android:textColor="#ffe0e0e0"
-				android:textAlignment="center"
-			 />
-			<TextView
-				android:text="Статус"
-				android:layout_width="60dp"
-				android:layout_height="wrap_content"
-				android:textSize="18dp"
-				android:textColor="#ffe0e0e0"
-				android:layout_marginLeft="10dp"
-				android:layout_weight="5"
-			/>
+		<TextView
+			android:layout_width="70dp"
+			android:layout_height="wrap_content"
+			android:textColor="#ffe0e0e0"
+			android:text="Крайний срок"
+			android:textSize="18dp"
+			android:textAlignment="center"
+			android:lineSpacingExtra="4dp"
+			android:layout_marginRight="5dp"
+			android:layout_weight="10"/>
 
-		</LinearLayout>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="#ffe0e0e0"
+			android:text="Статус"
+			android:textSize="18dp"
+			android:lineSpacingExtra="4dp"
+			android:layout_marginLeft="5dp"
+			android:layout_weight="5"/>
+
+		
+	</LinearLayout>
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -97,8 +93,8 @@
 			android:orientation="horizontal"
 		
 		/>
-
-	</LinearLayout>
+		
+	
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"

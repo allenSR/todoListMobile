@@ -12,8 +12,9 @@
 		android:layout_height="wrap_content"
 		android:id="@+id/toolbarCommonTasks"
 		android:textColor="#ffe0e0e0"
-		android:background="#4a4d65"
+		android:background="#2c3e50"
 		android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+		android:title="Общие задачи"
 		android:titleTextColor="@android:color/background_light"
 		/>
 

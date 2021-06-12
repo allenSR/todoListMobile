@@ -32,7 +32,7 @@
 				android:text="text extextex tex tex tex tex tex tex ex"
 				android:textSize="18dp"
 				android:lineSpacingExtra="4dp"
-				android:layout_width="200dp"
+				android:layout_width="170dp"
 				android:layout_height="wrap_content"
 				android:layout_marginLeft="15dp"
 				android:layout_weight="100"
@@ -55,14 +55,6 @@
 
 	</LinearLayout>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="2dp"
-		android:layout_marginBottom="2dp"
-		android:background="#ffbdbdbd"
-		android:orientation="horizontal"
-		
-		>
-	</LinearLayout>
+	
 
 </LinearLayout>

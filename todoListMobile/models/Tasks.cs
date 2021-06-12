@@ -16,5 +16,6 @@ namespace TodoList
         public object DateDeadline { get; set; }
         public object Date { get; set; }
         public int numberOfRows { get; internal set; }
+        public string nameDay { get; set; }
     }
 }

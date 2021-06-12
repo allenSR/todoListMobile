@@ -7,37 +7,36 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:background="#3c3f53"
-	android:orientation="vertical" >
+	android:orientation="vertical">
 
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
-	<android.support.design.widget.BottomNavigationView
-		android:id="@+id/myMenu"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginEnd="0dp"
-		android:layout_marginStart="0dp"
-		android:layout_marginTop="0dp"
-		android:background="#4a4d65"
-		android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"/>
-		</LinearLayout>
 
-	<ScrollView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		<Toolbar
+			android:minHeight="?android:attr/actionBarSize"
+			android:minWidth="25px"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/toolbarButtonScreen"
+			android:textColor="#ffe0e0e0"
+			android:background="#2c3e50"
+			android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
+			android:titleTextColor="@android:color/background_light"
+			android:title="Задачи по дням недели"
+		/>
+	</LinearLayout>
+
+
+
 	<LinearLayout
-	
-		
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:id="@+id/layoutContent"
 		android:orientation="vertical"
-		android:gravity="center_horizontal|bottom"
-		
+		android:gravity="center_vertical|center_horizontal"		
 		>
-	
-			
+
 		<Button
 			android:layout_width="300dp"
 			android:layout_height="50dp"
@@ -99,11 +98,8 @@
 			android:layout_marginTop="15dp"
 			android:background="@drawable/custombutton"
 			/>
-		
-
 
 
 	</LinearLayout>
 
-	</ScrollView>
-	</LinearLayout>
+</LinearLayout>

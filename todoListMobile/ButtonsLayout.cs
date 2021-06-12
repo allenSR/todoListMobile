@@ -28,6 +28,10 @@ namespace todoListMobile
             Button saturdayButton = FindViewById<Button>(Resource.Id.saturdayButton);
             Button sundayButton = FindViewById<Button>(Resource.Id.sundayButton);
 
+            Toolbar toolbar = FindViewById<Toolbar>(Resource.Id.toolbarButtonScreen);
+            toolbar.InflateMenu(Resource.Menu.myMenu);
+
+            toolbar.MenuItemClick += Toolbar_MenuItemClick;
             mondayButton.Click += mondayButton_Click;
             tuesdayButton.Click += tuesdayButton_Click;
             wednesdayButton.Click += wednesdayButton_Click;
@@ -46,6 +50,15 @@ namespace todoListMobile
             fridayButton.Text += " " + dateWeek.friday;
             saturdayButton.Text += " " + dateWeek.saturday;
             sundayButton.Text += " " + dateWeek.sunday;
+        }
+
+        private void Toolbar_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
+        {
+            if (e.Item.TitleFormatted.ToString() == "Настройки")
+            {
+                Intent intent = new Intent(this, typeof(Settings));
+                StartActivity(intent);
+            }
         }
 
         #region Запуск активити DailyTask
