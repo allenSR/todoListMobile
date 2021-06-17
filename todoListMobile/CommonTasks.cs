@@ -2,7 +2,6 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
@@ -15,7 +14,8 @@ using System.Text;
 using TodoList;
 
 namespace todoListMobile
-{[Activity(Label ="Общие задачи", Theme = "@style/AppTheme")]
+{
+    [Activity(Label = "Общие задачи", Theme = "@style/AppTheme")]
 
     class CommonTasks : Activity
     {
@@ -36,7 +36,7 @@ namespace todoListMobile
             string date = prefs.GetString("CurrentDate", "");
             toolbarCommonTasks.InflateMenu(Resource.Menu.myMenu_forTasks);
             toolbarCommonTasks.MenuItemClick += ToolbarCommonTasks_MenuItemClick;
-              
+
 
 
             try
@@ -141,7 +141,8 @@ namespace todoListMobile
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.SetTitle("Ошибка");
                     alert.SetMessage(ex.Message);
-                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                    alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                    {
                         return;
                     });
                     Dialog dialog = alert.Create();
@@ -150,10 +151,10 @@ namespace todoListMobile
                 }
                 Toast.MakeText(this, "Обновлено", ToastLength.Long).Show();
 
-                TaskAdapter adapter = new TaskAdapter(this, tasks);
+                TaskAdapter_Common adapter = new TaskAdapter_Common(this, tasks);
                 listView.Adapter = adapter;
             }
-            if(e.Item.TitleFormatted.ToString() == "Настройки")
+            if (e.Item.TitleFormatted.ToString() == "Настройки")
             {
                 Intent intent = new Intent(this, typeof(Settings));
                 StartActivity(intent);
@@ -169,7 +170,8 @@ namespace todoListMobile
             DateTime time;
             AlertDialog.Builder alertMain = new AlertDialog.Builder(this, AlertDialog.ThemeDeviceDefaultDark);
             alertMain.SetTitle("Выберите действие");
-            alertMain.SetPositiveButton("Редактировать", (senderAlert, args) => {
+            alertMain.SetPositiveButton("Редактировать", (senderAlert, args) =>
+            {
 
                 LayoutInflater inflater = LayoutInflater.From(this);
                 View subView = inflater.Inflate(Resource.Layout.EditCommonTaskDialog, null);
@@ -180,9 +182,9 @@ namespace todoListMobile
                 builder.SetView(subView);
                 builder.SetPositiveButton("Изменить", (senderAlert, args) =>
                 {
-                    if (string.IsNullOrEmpty(descriptionTaskText.Text))
+                    if (string.IsNullOrWhiteSpace(descriptionTaskText.Text) )
                     {
-                        AlertDialog.Builder alertError = new AlertDialog.Builder(this);
+                        AlertDialog.Builder alertError = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                         alertError.SetTitle("Ошибка");
                         alertError.SetMessage("Введите описание задачи");
                         alertError.SetNegativeButton("ОК", (senderAlert, args) =>
@@ -208,12 +210,12 @@ namespace todoListMobile
                             byte[] responsebytes = webClient.UploadValues(url, pars);
                             string responsebody = Encoding.UTF8.GetString(responsebytes);
 
-                            if(oldDescription == descriptionTaskText.Text)
+                            if (oldDescription == descriptionTaskText.Text)
                             {
                                 Toast.MakeText(this, "Задача не была изменена.", ToastLength.Long).Show();
                                 return;
                             }
-                            
+
                             if (responsebody != "[]")
                             {
                                 Toast.MakeText(this, "Нельзя изменить задачу на уже существующую.", ToastLength.Long).Show();
@@ -230,7 +232,6 @@ namespace todoListMobile
                                         webClientUpdate.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                                         webClientUpdate.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                                         parsUpdate.Add("format", "json");
-                                        // pars.Add("User", tasks[e.Position].User.ToString());
                                         parsUpdate.Add("Description", descriptionTaskText.Text);
                                         parsUpdate.Add("ID_Task", tasks[e.Position].ID_Task.ToString());
                                         if (tasks[e.Position].DealStatus == 1)
@@ -256,11 +257,11 @@ namespace todoListMobile
 
                                     }
                                     Toast.MakeText(this, "Задача успешно изменена", ToastLength.Long).Show();
-                                    listView.Adapter = new TaskAdapter(this, tasks);
+                                    listView.Adapter = new TaskAdapter_Common(this, tasks);
                                 }
                                 catch (System.Exception ex)
                                 {
-                                    Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                                    Toast.MakeText(this, "Произошла ошибка ", ToastLength.Long).Show();
                                 }
                             }
                         }
@@ -271,17 +272,18 @@ namespace todoListMobile
                         return;
                     }
 
-                  
+
                 });
                 Dialog dialogEdit = builder.Create();
                 dialogEdit.Show();
             });
             alertMain.SetNegativeButton("Удалить", (senderAlert, args) =>
             {
-                AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this, AlertDialog.ThemeDeviceDefaultDark);
+                AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alertConfirm.SetTitle("Подтверждение");
                 alertConfirm.SetMessage($"Вы уверены, что хотите удалить задачу \"{tasks[e.Position].Description}\" ");
-                alertConfirm.SetPositiveButton("Да", (senderAlert, args) => {
+                alertConfirm.SetPositiveButton("Да", (senderAlert, args) =>
+                {
 
                     try
                     {
@@ -303,12 +305,12 @@ namespace todoListMobile
                         {
                             tasks[i].NumberOfRows = i + 1;
                         }
-                        listView.Adapter = new TaskAdapter(this, tasks);
+                        listView.Adapter = new TaskAdapter_Common(this, tasks);
 
                     }
                     catch (System.Exception ex)
                     {
-                        Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                        Toast.MakeText(this, "Произошла ошибка ", ToastLength.Long).Show();
                     }
                 });
                 alertConfirm.SetNegativeButton("Нет", (senderAlert, args) =>
@@ -340,12 +342,13 @@ namespace todoListMobile
             builder.SetView(subView);
             builder.SetPositiveButton("Добавить задачу", (senderAlert, args) =>
             {
-                if (string.IsNullOrEmpty(descriptionTaskText.Text))
+                if (string.IsNullOrWhiteSpace(descriptionTaskText.Text))
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                     alert.SetTitle("Ошибка");
                     alert.SetMessage("Введите описание задачи");
-                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                    alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                    {
                         return;
                     });
                     Dialog dialog = alert.Create();
@@ -401,15 +404,16 @@ namespace todoListMobile
                             Description = descriptionText,
                             DealStatus = 1,
                         });
-                        listView.Adapter = new TaskAdapter(this, tasks);
+                        listView.Adapter = new TaskAdapter_Common(this, tasks);
                     }
                 }
                 catch (System.Exception ex)
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                     alert.SetTitle("Ошибка");
-                    alert.SetMessage(ex.Message);
-                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                    alert.SetMessage("Произошла ошибка");
+                    alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                    {
                         return;
                     });
                     Dialog dialog = alert.Create();
@@ -444,7 +448,7 @@ namespace todoListMobile
         {
             get { return items.Count; }
         }
- 
+
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             var item = items[position];
@@ -453,10 +457,6 @@ namespace todoListMobile
                 view = context.LayoutInflater.Inflate(Resource.Layout._itemsCommonTask, null);
             view.FindViewById<TextView>(Resource.Id.nuberTaskText_Common).Text = item.NumberOfRows.ToString();
             view.FindViewById<TextView>(Resource.Id.descriptionTaskText_Common).Text = item.Description;
-           /* if (item.DateDeadline != null)
-            {
-                view.FindViewById<TextView>(Resource.Id.).Text = item.DateDeadline.ToString();
-            }*/
             if (item.DealStatus == 2)
             {
                 view.FindViewById<CheckBox>(Resource.Id.dealStatusCheckBox_Common).Checked = true;
@@ -468,7 +468,8 @@ namespace todoListMobile
 
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context);
             CheckBox checkBox = view.FindViewById<CheckBox>(Resource.Id.dealStatusCheckBox_Common);
-            checkBox.CheckedChange += (s, e) =>  {
+            checkBox.CheckedChange += (s, e) =>
+            {
                 try
                 {
                     string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/CommonTasksUpdateStatus";

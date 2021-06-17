@@ -9,8 +9,9 @@ using System.Net;
 using System.Text;
 
 namespace todoListMobile
-{[Activity(Label ="Настройки")]
-    class Settings: Activity
+{
+    [Activity(Label = "Настройки")]
+    class Settings : Activity
     {
         Button deleteCompletedCommonTasksButton;
         Button deleteAllCommonTasksButton;
@@ -38,7 +39,7 @@ namespace todoListMobile
 
         private void NewPasswordButton_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(newPasswordText.Text))
+            if (string.IsNullOrWhiteSpace(newPasswordText.Text))
             {
                 AlertDialog.Builder alertError = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alertError.SetTitle("Ошибка");
@@ -51,7 +52,7 @@ namespace todoListMobile
                 dialogError.Show();
                 return;
             }
-            if(string.IsNullOrEmpty(confirmPasswordText.Text))
+            if (string.IsNullOrWhiteSpace(confirmPasswordText.Text))
             {
                 AlertDialog.Builder alertError = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alertError.SetTitle("Ошибка");
@@ -64,11 +65,11 @@ namespace todoListMobile
                 dialogError.Show();
                 return;
             }
-            if(newPasswordText.Text != confirmPasswordText.Text)
+            if (newPasswordText.Text != confirmPasswordText.Text)
             {
                 AlertDialog.Builder alertError = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alertError.SetTitle("Ошибка");
-                alertError.SetMessage("Введенные пароль ни совпадают");
+                alertError.SetMessage("Введенные пароль не совпадают");
                 alertError.SetNegativeButton("ОК", (senderAlert, args) =>
                 {
                     return;
@@ -128,7 +129,8 @@ namespace todoListMobile
         {
             AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
             alert.SetTitle("Вы уверены, что хотите удалить все  общие задачи?");
-            alert.SetPositiveButton("Да", (senderAlert, args) => {
+            alert.SetPositiveButton("Да", (senderAlert, args) =>
+            {
                 try
                 {
                     ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
@@ -165,7 +167,8 @@ namespace todoListMobile
         {
             AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
             alert.SetTitle("Вы уверены, что хотите удалить все выполненные общие задачи?");
-            alert.SetPositiveButton("Да", (senderAlert, args) => {
+            alert.SetPositiveButton("Да", (senderAlert, args) =>
+            {
                 try
                 {
                     ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
@@ -181,7 +184,7 @@ namespace todoListMobile
                         byte[] responsebytes = webClient.UploadValues(url, pars);
                         string responsebody = Encoding.UTF8.GetString(responsebytes);
 
-                        Toast.MakeText(this, "Все выполненные общие задачи успешно удалены", ToastLength.Long).Show();              
+                        Toast.MakeText(this, "Все выполненные общие задачи успешно удалены", ToastLength.Long).Show();
                     }
                 }
                 catch

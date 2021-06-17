@@ -2,25 +2,29 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Microsoft.PowerBI.Api.Models;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
+using System.IO;
 using System.Net;
 using System.Text;
-using todoListMobile.models;
-using Xamarin.Essentials;
 
 
 namespace todoListMobile
 {
-    [Activity(Label = "Список дел: вход", MainLauncher = true)]
-    class login: Activity
+    public class WebClientWithTimeout : WebClient
+    {
+        protected override WebRequest GetWebRequest(Uri address)
+        {
+            WebRequest wr = base.GetWebRequest(address);
+            wr.Timeout = 3000; // timeout in milliseconds (ms)
+            return wr;
+        }
+    }
+
+    [Activity(Label = "ToDoList", MainLauncher = true)]
+    class login : Activity
     {
 
         CheckBox checkBox;
@@ -47,7 +51,7 @@ namespace todoListMobile
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
             loginText.Text = prefs.GetString("login", "");
             bool checkStatus = prefs.GetBoolean("SavePassCheck", false);
-            if(checkStatus == true)
+            if (checkStatus == true)
             {
                 passwordText.Text = prefs.GetString("password", "");
                 checkBox.Checked = true;
@@ -60,7 +64,7 @@ namespace todoListMobile
             };
         }
 
-        
+
         private void connectionSettingsButton_Click(object sender, EventArgs e)
         {
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
@@ -79,12 +83,13 @@ namespace todoListMobile
             builder.SetView(subView);
             builder.SetPositiveButton("ОК", (senderAlert, args) =>
             {
-                if(string.IsNullOrEmpty(serverAddresText.Text))
+                if (string.IsNullOrEmpty(serverAddresText.Text))
                 {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeDeviceDefaultDark);
                     alert.SetTitle("Ошибка");
                     alert.SetMessage("Укажите адрес сервера.");
-                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                    alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                    {
                         return;
                     });
                     Dialog dialog = alert.Create();
@@ -96,7 +101,8 @@ namespace todoListMobile
                     AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeDeviceDefaultDark);
                     alert.SetTitle("Ошибка");
                     alert.SetMessage("Укажите порт сервера.");
-                    alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                    alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                    {
                         return;
                     });
                     Dialog dialog = alert.Create();
@@ -106,8 +112,8 @@ namespace todoListMobile
 
 
 
-                editor.PutString( "addres",  serverAddresText.Text);
-                editor.PutString("port",  serverPortText.Text);
+                editor.PutString("addres", serverAddresText.Text);
+                editor.PutString("port", serverPortText.Text);
                 editor.Apply();
                 Toast.MakeText(this, "Строка подключения изменена.", ToastLength.Long).Show();
             });
@@ -115,9 +121,9 @@ namespace todoListMobile
             dialogSettings.Show();
         }
 
+        [Obsolete]
         private void LoginButton_Click(object sender, EventArgs e)
         {
-                     
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
             ISharedPreferencesEditor editor = prefs.Edit();
 
@@ -130,29 +136,31 @@ namespace todoListMobile
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Ошибка");
                 alert.SetMessage(errors.ToString());
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
-                   
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
+                    return;
                 });
                 Dialog dialog = alert.Create();
                 dialog.Show();
                 return;
             }
-            
+
             try
             {
                 string url = "http://" + prefs.GetString("addres", "") + ":" + prefs.GetString("port", "") + "/userLogin";
-                using (var webClient = new WebClient())
+                using (WebClient wc = new WebClientWithTimeout())
                 {
+                   
                     var pars = new NameValueCollection();
-                    webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                    wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                     pars.Add("format", "json");
                     pars.Add("Login", loginText.Text);
                     pars.Add("Password", passwordText.Text);
-                    byte[] responsebytes = webClient.UploadValues(url, pars);
+                    byte[] responsebytes = wc.UploadValues(url, pars);
                     string responsebody = Encoding.UTF8.GetString(responsebytes);
                     if (responsebody == "")
                     {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                        AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                         alert.SetTitle("Ошибка");
                         alert.SetMessage("Неверный логин или пароль.");
                         alert.SetNegativeButton("ОК", (senderAlert, args) =>
@@ -169,27 +177,43 @@ namespace todoListMobile
                         editor.Apply();
                     }
 
-                   
-                } 
-                if(prefs.GetString("login", "")!= loginText.Text || prefs.GetString("password", "") != passwordText.Text)
+
+                }
+                if (prefs.GetString("login", "") != loginText.Text || prefs.GetString("password", "") != passwordText.Text)
                 {
                     editor.PutString("login", loginText.Text);
                     editor.PutString("password", passwordText.Text);
                     editor.PutBoolean("SavePassCheck", checkBox.Checked);
                     editor.Apply();
                 }
-                
 
 
-               Intent intent = new Intent(this, typeof(MainActivity));
+
+                Intent intent = new Intent(this, typeof(MainActivity));
                 StartActivity(intent);
             }
-            catch (Exception ex)
+          
+            
+           catch (Exception ex)
             {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alert.SetTitle("Ошибка");
-                alert.SetMessage(ex.Message);
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                if (ex.Message.Contains("Could not find a part of the path "))
+                {
+                    alert.SetMessage("Некорректная строка подключения к серверу");
+                }
+                if(ex.Message.Contains("The operation has timed out."))
+                {
+                    alert.SetMessage("Не удается подключиться к серверу." +
+                        " Возможно указан неверный адрес сервера.");
+                }
+                else
+                {
+                    alert.SetMessage("Произошла ошибка.");
+                }
+               
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();

@@ -2,23 +2,17 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
-using Android.Support.V7.RecyclerView.Extensions;
+using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
-using Java.Lang;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Text;
 using TodoList;
-using static Android.Widget.AdapterView;
-using static Android.Widget.CompoundButton;
-using static Android.Widget.RadioGroup;
 
 namespace todoListMobile
 {
@@ -31,7 +25,7 @@ namespace todoListMobile
         ImageButton addTaskButton;
         List<Tasks> tasks = new List<Tasks>();
 
-
+        //private static  int NOTIFY_ID = 101;
         protected override void OnCreate(Bundle savedInstanceState)
 
         {
@@ -77,7 +71,6 @@ namespace todoListMobile
                     webClient.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                     webClient.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                     pars.Add("format", "json");
-                    //pars.Add("User", prefs.GetInt("ID_User", 0).ToString());
                     pars.Add("Date", date);
                     byte[] responsebytes = webClient.UploadValues(url, pars);
                     string responsebody = Encoding.UTF8.GetString(responsebytes);
@@ -125,7 +118,7 @@ namespace todoListMobile
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alert.SetTitle("Ошибка");
-                alert.SetMessage(ex.Message);
+                alert.SetMessage("Произошла ошибка.");
                 alert.SetNegativeButton("ОК", (senderAlert, args) =>
                 {
                     return;
@@ -157,6 +150,18 @@ namespace todoListMobile
                 addTaskButton.Enabled = false;
                 addTaskButton.SetImageResource(Resource.Drawable.plus_disable);
             }
+
+/*
+            Android.Support.V4.App.NotificationCompat.Builder builder =
+                       new Android.Support.V4.App.NotificationCompat.Builder(this)
+                       .SetSmallIcon(Resource.Drawable.abc_ab_share_pack_mtrl_alpha)
+                       .SetContentTitle("Напоминание")
+                       .SetContentText("Пора покормить кота")
+                       .SetPriority(Android.Support.V4.App.NotificationCompat.PriorityDefault);
+
+            NotificationManagerCompat notificationManager =
+                    NotificationManagerCompat.From(this);
+            notificationManager.Notify(NOTIFY_ID, builder.Build());*/
         }
 
         private void Toolbar_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
@@ -232,7 +237,7 @@ namespace todoListMobile
                 {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                     alert.SetTitle("Ошибка");
-                    alert.SetMessage(ex.Message);
+                    alert.SetMessage("Произошла ошибка.");
                     alert.SetNegativeButton("ОК", (senderAlert, args) =>
                     {
                         return;
@@ -306,9 +311,9 @@ namespace todoListMobile
                 builder.SetView(subView);
                 builder.SetPositiveButton("ОК", (senderAlert, args) =>
                 {
-                    if (string.IsNullOrEmpty(descriptionTaskText.Text))
+                    if (string.IsNullOrWhiteSpace(descriptionTaskText.Text))
                     {
-                        AlertDialog.Builder alertError = new AlertDialog.Builder(this);
+                        AlertDialog.Builder alertError = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                         alertError.SetTitle("Ошибка");
                         alertError.SetMessage("Введите описание задачи");
                         alertError.SetNegativeButton("ОК", (senderAlert, args) =>
@@ -406,7 +411,7 @@ namespace todoListMobile
                                 }
                                 catch (System.Exception ex)
                                 {
-                                    Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                                    Toast.MakeText(this, "Произошла ошибка ", ToastLength.Long).Show();
                                 }
                                 return;
                             }
@@ -426,7 +431,6 @@ namespace todoListMobile
                                         webClientUpdate.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
                                         webClientUpdate.Headers.Add("x-auth-token", prefs.GetString("ID_User", ""));
                                         parsUpdate.Add("format", "json");
-                                        //pars.Add("User", tasks[e.Position].User.ToString());
                                         parsUpdate.Add("Date", endDate);
                                         parsUpdate.Add("Description", descriptionTaskText.Text);
                                         parsUpdate.Add("ID_Task", tasks[e.Position].ID_Task.ToString());
@@ -480,7 +484,7 @@ namespace todoListMobile
                                 }
                                 catch (System.Exception ex)
                                 {
-                                    Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                                    Toast.MakeText(this, "Произошла ошибка ", ToastLength.Long).Show();
                                 }
                             }
                         }
@@ -496,7 +500,7 @@ namespace todoListMobile
             });
             alert.SetPositiveButton("Удалить", (senderAlert, args) =>
             {
-                AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this, AlertDialog.ThemeDeviceDefaultDark);
+                AlertDialog.Builder alertConfirm = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alertConfirm.SetTitle("Подтверждение");
                 alertConfirm.SetMessage($"Вы уверены, что хотите удалить задачу \"{tasks[e.Position].Description}\" ");
                 alertConfirm.SetPositiveButton("Да", (senderAlert, args) =>
@@ -528,7 +532,7 @@ namespace todoListMobile
                     }
                     catch (System.Exception ex)
                     {
-                        Toast.MakeText(this, "Произошла ошибка " + ex.Message, ToastLength.Long).Show();
+                        Toast.MakeText(this, "Произошла ошибка ", ToastLength.Long).Show();
                     }
                 });
                 alertConfirm.SetNegativeButton("Нет", (senderAlert, args) =>
@@ -548,6 +552,7 @@ namespace todoListMobile
             ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(this);
             string Currentdate = prefs.GetString("CurrentDate", "");
             string ID_User = prefs.GetString("ID_User", "");
+            DateTime currentTime = DateTime.Now;
 
             LayoutInflater inflater = LayoutInflater.From(this);
             View subView = inflater.Inflate(Resource.Layout.AddTaskDialog, null);
@@ -556,6 +561,10 @@ namespace todoListMobile
             TimePicker deadlineTimePicker = (TimePicker)subView.FindViewById(Resource.Id.deadlineTimePicker);
             deadlineTimePicker.SetIs24HourView((Java.Lang.Boolean)true);
 
+           /* currentTime.AddHours(1);
+            deadlineTimePicker.Hour = currentTime.Hour;
+            deadlineTimePicker.Minute = 00;*/
+            
             bool checkedStatus = false;
             string descriptionText = "";
             DateTime time;
@@ -564,9 +573,9 @@ namespace todoListMobile
             builder.SetView(subView);
             builder.SetPositiveButton("ОК", (senderAlert, args) =>
             {
-                if (string.IsNullOrEmpty(descriptionTaskText.Text))
+                if (string.IsNullOrWhiteSpace(descriptionTaskText.Text))
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                     alert.SetTitle("Ошибка");
                     alert.SetMessage("Введите описание задачи");
                     alert.SetNegativeButton("ОК", (senderAlert, args) =>
@@ -653,9 +662,9 @@ namespace todoListMobile
                 }
                 catch (System.Exception ex)
                 {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                     alert.SetTitle("Ошибка");
-                    alert.SetMessage(ex.Message);
+                    alert.SetMessage("Произошла ошибка.");
                     alert.SetNegativeButton("ОК", (senderAlert, args) =>
                     {
                         return;

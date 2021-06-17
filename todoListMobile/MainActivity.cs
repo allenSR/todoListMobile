@@ -1,19 +1,13 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Preferences;
-using Android.Runtime;
-using Android.Support.Design.Widget;
-using Android.Support.V7.App;
-using Android.Views;
 using Android.Widget;
 using CHD;
 using System;
-using TodoList;
 
 namespace todoListMobile
 {
-    [Activity (Label ="ToDo list"/*MainLauncher = true*/)]
+    [Activity(Label = "ToDo list"/*MainLauncher = true*/)]
     public class MainActivity : Activity//, BottomNavigationView.IOnNavigationItemSelectedListener
     {                          //AppCompatActivity - сверху отображается название лайоута
         Button dailyTaskButton;
@@ -21,6 +15,7 @@ namespace todoListMobile
         Button exitButton;
         Button weeklyTaskButton;
         Button allTaskButton;
+        Button addCalendarTask_Button;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -34,7 +29,8 @@ namespace todoListMobile
             exitButton = FindViewById<Button>(Resource.Id.ExitButton);
             weeklyTaskButton = FindViewById<Button>(Resource.Id.weeklyTaskButton);
             allTaskButton = FindViewById<Button>(Resource.Id.allTaskButton);
-
+            addCalendarTask_Button = FindViewById<Button>(Resource.Id.addCalendarTask_Button);
+            addCalendarTask_Button.Click += AddCalendarTask_Button_Click;
             toolbarCommonTasks.MenuItemClick += ToolbarCommonTasks_MenuItemClick;
             dailyTaskButton.Click += DailyTaskButton_Click;
             commonTaskButton.Click += CommonTaskButton_Click;
@@ -52,6 +48,12 @@ namespace todoListMobile
             ///
         }
 
+        private void AddCalendarTask_Button_Click(object sender, EventArgs e)
+        {
+            Intent intent = new Intent(this, typeof(AddCalendarTask));
+            StartActivity(intent);
+        }
+
         private void AllTaskButton_Click(object sender, EventArgs e)
         {
             Intent intent = new Intent(this, typeof(AllTasks));
@@ -66,7 +68,7 @@ namespace todoListMobile
 
         private void ToolbarCommonTasks_MenuItemClick(object sender, Toolbar.MenuItemClickEventArgs e)
         {
-           
+
             Intent intent = new Intent(this, typeof(Settings));
             StartActivity(intent);
         }
@@ -85,17 +87,17 @@ namespace todoListMobile
 
         private void DailyTaskButton_Click(object sender, EventArgs e)
         {
-            Intent intent = new Intent(this,  typeof(ButtonsLayout));
+            Intent intent = new Intent(this, typeof(ButtonsLayout));
             StartActivity(intent);
         }
 
-      /*  public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
-            Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        /*  public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+          {
+              Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-        }*/
-      
+              base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+          }*/
+
         #region Защита от возврата на страницу входа
         public override void OnBackPressed()
         {

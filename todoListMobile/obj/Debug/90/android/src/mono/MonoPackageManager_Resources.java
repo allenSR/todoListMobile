@@ -1,8 +1,8 @@
 package mono;
 public class MonoPackageManager_Resources {
 	public static String[] Assemblies = new String[]{
-		/* We need to ensure that "todoListMobile.dll" comes first in this list. */
-		"todoListMobile.dll",
+		/* We need to ensure that "ToDoListMobile.dll" comes first in this list. */
+		"ToDoListMobile.dll",
 		"CHD.HWBackButtonManager.dll",
 		"Microsoft.PowerBI.Api.dll",
 		"Microsoft.Rest.ClientRuntime.dll",

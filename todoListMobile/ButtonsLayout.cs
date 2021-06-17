@@ -2,17 +2,13 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using TodoList;
 
 namespace todoListMobile
-{   [Activity]
+{
+    [Activity]
     class ButtonsLayout : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)

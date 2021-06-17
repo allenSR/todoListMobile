@@ -2,21 +2,20 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
 using System.Text;
 using TodoList;
 
 namespace todoListMobile
-{   [Activity]
-    class WeeklyTasks: Activity
+{
+    [Activity]
+    class WeeklyTasks : Activity
     {
         ListView weeklyTasksListView;
         List<Tasks> tasks = new List<Tasks>();
@@ -75,7 +74,7 @@ namespace todoListMobile
                             User = a.User,
                             NumberOfRows = i + 1,
                             Description = a.Description,
-                            Date = dayOfWeek.ToString("MM.dd"),
+                            Date = dayOfWeek.ToString("dd.MM"),
                             DealStatus = status,
                             nameDay = nameDay
 
@@ -87,8 +86,9 @@ namespace todoListMobile
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alert.SetTitle("Ошибка");
-                alert.SetMessage(ex.Message);
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                alert.SetMessage("Произошла ошибка");
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();

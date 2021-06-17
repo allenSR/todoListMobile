@@ -112,7 +112,7 @@
 			android:src="@drawable/plus_40632"
 			android:scaleType="fitXY"
 			android:layout_marginBottom="15dp"
-			android:layout_marginRight="10dp"
+			android:layout_marginRight="15dp"
 			android:background="@color/mtrl_btn_transparent_bg_color"
 			android:clickable= "true"
 			android:focusable="false"

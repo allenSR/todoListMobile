@@ -2,14 +2,12 @@
 using Android.Content;
 using Android.OS;
 using Android.Preferences;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
 using System.Text;
 using TodoList;
@@ -57,7 +55,7 @@ namespace todoListMobile
                         var description = a.Description;
                         DateTime dateCur = (DateTime)a.Date;
                         var status = a.DealStatus;
-                    
+
                         tasks.Add(new Tasks()
                         {
                             ID_Task = a.ID_Task,
@@ -76,8 +74,9 @@ namespace todoListMobile
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this, AlertDialog.ThemeHoloDark);
                 alert.SetTitle("Ошибка");
-                alert.SetMessage(ex.Message);
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                alert.SetMessage("Произошла ошибка.");
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();
@@ -132,13 +131,13 @@ namespace todoListMobile
             View view = convertView;
 
             DateTime dt = Convert.ToDateTime(item.Date);
-            
+
             if (view == null) // no view to re-use, create new
                 view = context.LayoutInflater.Inflate(Resource.Layout._itemsAllTasks, null);
             view.FindViewById<TextView>(Resource.Id.numberOfAllTaskText).Text = item.NumberOfRows.ToString();
             view.FindViewById<TextView>(Resource.Id.descriptionAllTaskText).Text = item.Description;
             view.FindViewById<TextView>(Resource.Id.dateAllTaskText).Text = dt.ToString("dd.MM");
-           
+
             if (item.DealStatus == 2)
             {
                 view.FindViewById<CheckBox>(Resource.Id.statusAllTaskText).Checked = true;
@@ -147,7 +146,7 @@ namespace todoListMobile
             {
                 view.FindViewById<CheckBox>(Resource.Id.statusAllTaskText).Checked = false;
             }
-           // ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context); 
+            // ISharedPreferences prefs = PreferenceManager.GetDefaultSharedPreferences(context); 
 
             return view;
         }

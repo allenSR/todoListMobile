@@ -1,20 +1,16 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net;
 using System.Text;
 
 namespace todoListMobile
 {
     [Activity(Label = "New activity")]
-    class Register: MainActivity
+    class Register : MainActivity
     {
         Button returnButton;
         protected override void OnCreate(Bundle savedInstanceState)
@@ -47,7 +43,7 @@ namespace todoListMobile
             StringBuilder errors = new StringBuilder();
             if (string.IsNullOrWhiteSpace(loginText.Text)) errors.AppendLine("Придумайте логин.");
             if (string.IsNullOrWhiteSpace(passText.Text)) errors.AppendLine("Придумайте пароль.");
-            if(string.IsNullOrWhiteSpace(repeatPassText.Text)) errors.AppendLine("Повторите пароль");
+            if (string.IsNullOrWhiteSpace(repeatPassText.Text)) errors.AppendLine("Повторите пароль");
             if (errors.Length > 0)
             {
                 // MessageBox.Show(errors.ToString(), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -55,7 +51,8 @@ namespace todoListMobile
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Ошибка");
                 alert.SetMessage(errors.ToString());
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();
@@ -63,12 +60,13 @@ namespace todoListMobile
                 return;
             }
 
-            if(passText.Text != repeatPassText.Text)
+            if (passText.Text != repeatPassText.Text)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Ошибка");
                 alert.SetMessage("Введенные пароли не совпадают");
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();
@@ -95,7 +93,8 @@ namespace todoListMobile
                         AlertDialog.Builder alert = new AlertDialog.Builder(this);
                         alert.SetTitle("Ошибка");
                         alert.SetMessage("Пользователь с таким логином уже существует.");
-                        alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                        alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                        {
                             return;
                         });
                         Dialog dialog = alert.Create();
@@ -103,8 +102,8 @@ namespace todoListMobile
                         return;
                     }
 
-                 using (var Webclient2 = new WebClient())
-                 {
+                    using (var Webclient2 = new WebClient())
+                    {
                         string url2 = "http://192.168.0.103:3006/UserAdd";
                         var pars2 = new NameValueCollection();
                         Webclient2.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
@@ -117,7 +116,8 @@ namespace todoListMobile
                         AlertDialog.Builder alert = new AlertDialog.Builder(this);
                         alert.SetTitle("Уведомление");
                         alert.SetMessage("Пользователь успешно создан.");
-                        alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                        alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                        {
                             return;
                         });
                         Dialog dialog = alert.Create();
@@ -127,12 +127,13 @@ namespace todoListMobile
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle("Ошибка");
                 alert.SetMessage(ex.Message);
-                alert.SetNegativeButton("ОК", (senderAlert, args) => {
+                alert.SetNegativeButton("ОК", (senderAlert, args) =>
+                {
                     return;
                 });
                 Dialog dialog = alert.Create();

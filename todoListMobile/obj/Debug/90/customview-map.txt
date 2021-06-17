@@ -3,11 +3,13 @@ adaptive-icon;obj\Debug\90\res\mipmap-anydpi-v26\ic_launcher_round.xml
 background;obj\Debug\90\res\mipmap-anydpi-v26\ic_launcher.xml
 background;obj\Debug\90\res\mipmap-anydpi-v26\ic_launcher_round.xml
 Button;obj\Debug\90\res\layout\activity_main.xml
+Button;obj\Debug\90\res\layout\addcalendartask.xml
 Button;obj\Debug\90\res\layout\buttonslayout.xml
 Button;obj\Debug\90\res\layout\login.xml
 Button;obj\Debug\90\res\layout\registrationforms.xml
 Button;obj\Debug\90\res\layout\settings.xml
 cache-path;C:\todoListMobile\todoListMobile\obj\Debug\90\lp\35\jl\res\xml\xamarin_essentials_fileprovider_file_paths.xml
+CalendarView;obj\Debug\90\res\layout\addcalendartask.xml
 CheckBox;obj\Debug\90\res\layout\_items.xml
 CheckBox;obj\Debug\90\res\layout\_itemsalltasks.xml
 CheckBox;obj\Debug\90\res\layout\_itemscommontask.xml
@@ -18,7 +20,9 @@ CheckBox;obj\Debug\90\res\layout\login.xml
 color;obj\Debug\90\res\values\colors.xml
 color;obj\Debug\90\res\values\ic_launcher_background.xml
 corners;obj\Debug\90\res\drawable\custombutton.xml
+DatePicker;obj\Debug\90\res\layout\addcalendartask.xml
 dimen;obj\Debug\90\res\values\dimens.xml
+EditText;obj\Debug\90\res\layout\addcalendartask.xml
 EditText;obj\Debug\90\res\layout\addcommontaskdialog.xml
 EditText;obj\Debug\90\res\layout\addtaskdialog.xml
 EditText;obj\Debug\90\res\layout\editcommontaskdialog.xml
@@ -43,6 +47,7 @@ LinearLayout;obj\Debug\90\res\layout\_itemsalltasks.xml
 LinearLayout;obj\Debug\90\res\layout\_itemscommontask.xml
 LinearLayout;obj\Debug\90\res\layout\_itemsweeklytasks.xml
 LinearLayout;obj\Debug\90\res\layout\activity_main.xml
+LinearLayout;obj\Debug\90\res\layout\addcalendartask.xml
 LinearLayout;obj\Debug\90\res\layout\addcommontaskdialog.xml
 LinearLayout;obj\Debug\90\res\layout\addtaskdialog.xml
 LinearLayout;obj\Debug\90\res\layout\alltasks.xml
@@ -75,16 +80,15 @@ resources;obj\Debug\90\res\values\dimens.xml
 resources;obj\Debug\90\res\values\ic_launcher_background.xml
 resources;obj\Debug\90\res\values\strings.xml
 resources;obj\Debug\90\res\values\styles.xml
-ScrollView;obj\Debug\90\res\layout\buttonslayout.xml
 shape;obj\Debug\90\res\drawable\custombutton.xml
 solid;obj\Debug\90\res\drawable\custombutton.xml
-Space;obj\Debug\90\res\layout\login.xml
 string;obj\Debug\90\res\values\strings.xml
 style;obj\Debug\90\res\values\styles.xml
 TextView;obj\Debug\90\res\layout\_items.xml
 TextView;obj\Debug\90\res\layout\_itemsalltasks.xml
 TextView;obj\Debug\90\res\layout\_itemscommontask.xml
 TextView;obj\Debug\90\res\layout\_itemsweeklytasks.xml
+TextView;obj\Debug\90\res\layout\addcalendartask.xml
 TextView;obj\Debug\90\res\layout\addcommontaskdialog.xml
 TextView;obj\Debug\90\res\layout\addtaskdialog.xml
 TextView;obj\Debug\90\res\layout\alltasks.xml
@@ -100,6 +104,7 @@ TextView;obj\Debug\90\res\layout\weeklytasks.xml
 TimePicker;obj\Debug\90\res\layout\addtaskdialog.xml
 TimePicker;obj\Debug\90\res\layout\edittaskdialog.xml
 Toolbar;obj\Debug\90\res\layout\activity_main.xml
+Toolbar;obj\Debug\90\res\layout\addcalendartask.xml
 Toolbar;obj\Debug\90\res\layout\alltasks.xml
 Toolbar;obj\Debug\90\res\layout\buttonslayout.xml
 Toolbar;obj\Debug\90\res\layout\commontasks.xml
